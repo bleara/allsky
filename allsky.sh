@@ -3,14 +3,16 @@
 if [ -z "$ALLSKY_HOME" ]
 then
       export ALLSKY_HOME="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+      export PATH=$PATH:/home/pi/allsky/veye:
 fi
-
 # reset auto camera selection, so $ALLSKY_HOME/config.sh do not pick up old camera selection
 echo "" > "$ALLSKY_HOME/autocam.sh"
 source $ALLSKY_HOME/config.sh
 
 echo "Making sure allsky.sh is not already running..."
 ps -ef | grep allsky.sh | grep -v $$ | xargs "sudo kill -9" 2>/dev/null
+
+echo $CAMERA
 
 # old/regular manual camera selection mode => exit if no requested camera was found
 RPiHQIsPresent=$(vcgencmd get_camera)
@@ -28,26 +30,31 @@ if [[ $CAMERA == "ZWO" &&  $ZWOIsPresent -eq 0 ]]; then
 fi
 
 # CAMERA AUTOSELECT
-# exit if no camare found at all
-if [[ $CAMERA -eq "auto" ]]; then
+# exit if no camara found at all
+if [[ $CAMERA = "auto" ]]; then
   echo "Trying to automatically choose between ZWO and RPI camera"
   if [[ $ZWOIsPresent -eq 0 && $RPiHQIsPresent != "supported=1 detected=1" ]]; then
           echo "None of RPI or ZWO Cameras were found. Exiting." >&2
           sudo systemctl stop allsky
           exit 0
   fi
-  # prioritize ZWO camera if exists, and use RPI camera otherwise
-  if [[ $ZWOIsPresent -eq 0 ]]; then
+  # prioritize ZWO camera if exists, and chose RPI HQ or Rpi VEYEcamera otherwise
+  if [[ $ZWOIsPresent -eq 1 ]]; then
     echo "No ZWO camera found. Choosing RPI"
     CAMERA="RPiHQ"
-  else
+  elif [[ $CAMERA == "RPiHQ" ]]; then
     echo "ZWO camera found. Choosing ZWO"
     CAMERA="ZWO"
+  else
+    echo "RPi VEYE camera found. Choosing VEYE"
+    CAMERA="RPi_VEYE"
   fi
 
   # redefine the settings variable
   CAMERA_SETTINGS="$CAMERA_SETTINGS_DIR/settings_$CAMERA.json"
 fi
+# TEMPORARY
+  CAMERA_SETTINGS="$CAMERA_SETTINGS_DIR/settings_$CAMERA.json"
 
 
 echo "Settings check done"
@@ -83,4 +90,7 @@ if [[ $CAMERA == "ZWO" ]]; then
 	$ALLSKY_HOME/capture $ARGUMENTS
 elif [[ $CAMERA == "RPiHQ" ]]; then
 	$ALLSKY_HOME/capture_RPiHQ $ARGUMENTS
+elif [[ $CAMERA == "RPi_VEYE" ]]; then
+	$ALLSKY_HOME/capture_RPi_VEYE $ARGUMENTS
 fi
+

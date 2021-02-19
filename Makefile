@@ -40,7 +40,7 @@ endif
 
 CFLAGS = -Wall -Wno-psabi -g $(DEFS) $(COMMON) $(ZWOSDK) -lpthread  -DGLIBC_20
 
-all:capture capture_RPiHQ startrails keogram sunwait-remove-precompiled sunwait
+all:capture capture_RPiHQ capture_RPi_VEYE startrails keogram sunwait-remove-precompiled sunwait
 
 sunwait-remove-precompiled:
 ifneq ("arm", $(findstring $(platform), "arm"))
@@ -59,6 +59,9 @@ capture:capture.cpp
 capture_RPiHQ:capture_RPiHQ.cpp
 	$(CC)  capture_RPiHQ.cpp -o capture_RPiHQ $(CFLAGS) $(OPENCV) -lASICamera2 $(USB)
 
+capture_RPi_VEYE:capture_RPi_VEYE.cpp
+	$(CC)  capture_RPi_VEYE.cpp -o capture_RPi_VEYE $(CFLAGS) $(OPENCV) -lASICamera2 $(USB)
+
 startrails:startrails.cpp
 	$(CC)  startrails.cpp -o startrails $(CFLAGS) $(OPENCV)
 
@@ -66,4 +69,4 @@ keogram:keogram.cpp
 	$(CC)  keogram.cpp -o keogram $(CFLAGS) $(OPENCV)
 
 clean:
-	rm -f capture capture_RPiHQ startrails keogram
+	rm -f capture capture_RPiHQ capture_RPi_VEYE startrails keogram
