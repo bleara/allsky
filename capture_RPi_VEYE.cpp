@@ -130,7 +130,7 @@ void writeToLog(int val)
 }
 
 // Build capture command to capture the image from the HQ camera
-void RPiHQcapture(int asiAutoFocus, int asiAutoExposure, int asiExposure, int asiAutoGain, int asiAutoAWB, double asiGain, int bin, double asiWBR, double asiWBB, int asiRotation, int asiFlip, int asiGamma, int asiBrightness, int quality, const char* fileName, int time, int showDetails, const char* ImgText, int fontsize, int fontcolor, int background, int darkframe)
+void RPi_VEYE_Capture(int asiAutoFocus, int asiAutoExposure, int asiExposure, int asiAutoGain, int asiAutoAWB, double asiGain, int bin, double asiWBR, double asiWBB, int asiRotation, int asiFlip, int asiGamma, int asiBrightness, int quality, const char* fileName, int time, int showDetails, const char* ImgText, int fontsize, int fontcolor, int background, int darkframe)
 {
 	printf ("capturing image in file %s\n", fileName);
 
@@ -1018,7 +1018,7 @@ int main(int argc, char *argv[])
 			// Execute end of night script
 			if (endOfNight == true)
 			{
-				system("scripts/endOfNight_RPiHQ.sh &");
+				system("scripts/endOfNight.sh &");
 
 				// Reset end of night indicator
 				endOfNight = false;
@@ -1115,7 +1115,7 @@ int main(int argc, char *argv[])
 				printf("Capturing & saving image...\n");
 
 				// Capture and save image
-				RPiHQcapture(asiAutoFocus, asiAutoExposure, currentExposure, asiAutoGain, asiAutoAWB, asiGain, bin, asiWBR, asiWBB, asiRotation, asiFlip, asiGamma, asiBrightness, quality, fileName, time, showDetails, ImgText, fontsize, fontcolor, background, darkframe);
+				RPi_VEYE_Capture(asiAutoFocus, asiAutoExposure, currentExposure, asiAutoGain, asiAutoAWB, asiGain, bin, asiWBR, asiWBB, asiRotation, asiFlip, asiGamma, asiBrightness, quality, fileName, time, showDetails, ImgText, fontsize, fontcolor, background, darkframe);
 
 				// Check if no processing is going on
 				if (!bSavingImg)

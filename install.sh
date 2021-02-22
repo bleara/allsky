@@ -76,7 +76,7 @@ systemctl enable allsky.service
 # Modify the path permanently
 echo '# set PATH so it includes veye directory if it exists' >> $HOME/.profile
 echo 'if [ -d "$HOME/allsky/veye" ] ; then '>>$HOME/.profile
-echo '$PATH="$HOME/allsky/veye:$PATH" '>> $HOME/.profile
+echo 'PATH="$HOME/allsky/veye:$PATH" '>> $HOME/.profile
 echo 'fi' >> $HOME/.profile
 echo -en '\n'
 
