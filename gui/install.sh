@@ -46,8 +46,9 @@ cat $SCRIPTPATH/sudoers >> /etc/sudoers.d/allsky
 echo -en '\n'
 echo -e "${GREEN}* Retrieving github files to build admin portal${NC}"
 rm -rf /var/www/html
-git clone https://github.com/thomasjacquin/allsky-portal.git /var/www/html
+git clone https://github.com/bleara/allsky-portal.git /var/www/html
 chown -R www-data:www-data /var/www/html
+sudo chmod 644 /var/www/html/*.json
 mkdir -p /etc/raspap
 mv /var/www/html/raspap.php /etc/raspap/
 mv /var/www/html/camera_options_ZWO.json /etc/raspap/
@@ -56,7 +57,6 @@ mv /var/www/html/camera_options_RPi_VEYE.json /etc/raspap/
 cp $(dirname "$SCRIPTPATH")/settings_ZWO.json /etc/raspap/settings_ZWO.json
 cp $(dirname "$SCRIPTPATH")/settings_RPiHQ.json /etc/raspap/settings_RPiHQ.json
 cp $(dirname "$SCRIPTPATH")/settings_RPi_VEYE.json /etc/raspap/settings_RPi_VEYE.json
-sudo chomod 666 /etc/raspap/*.json
 chown -R www-data:www-data /etc/raspap
 usermod -a -G www-data `logname`
 echo -en '\n'
